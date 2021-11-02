@@ -15,17 +15,27 @@ with open('recipes.txt', encoding='utf-8') as file:
         file.readline()
     # pprint(cook_book)
 
+
 # функция которая принимает на вход блюдо и количество порций и считает количество ингридиентов
-shop_list_by_dishes = {}
+
 
 def get_shop_list_by_dishes(dishes, person_count):
+    shop_list_by_dishes = {}
     for dish in dishes:
-        for recipt, item in cook_book.items():
-            if dish == recipt:
-                for ingridient in item:
-                    count = int(ingridient['quantity']) * person_count
-                    measuring = {'measuring': ingridient['measuring'], 'quantity': count}
-                    shop_list_by_dishes = {ingridient['ingridient']: measuring}
-                    print(shop_list_by_dishes)
+        item = cook_book[dish]
+        for ingridient in item:
+            count = int(ingridient['quantity']) * person_count
+            ingridient_name = ingridient['ingridient']
+            if ingridient_name in shop_list_by_dishes.keys():
+                measuring = shop_list_by_dishes[ingridient_name]
+                measuring['quantity'] += count
+            else:
+                basic_measuring = {
+                    'measuring': ingridient['measuring'],
+                    'quantity': count
+                }
+                shop_list_by_dishes[ingridient_name] = basic_measuring
+    pprint(shop_list_by_dishes)
 
-get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2)
+
+get_shop_list_by_dishes(['Омлет', 'Омлет'], 2)
